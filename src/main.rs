@@ -1,3 +1,4 @@
+use std::fs;
 use std::io::{Read, Write};
 use std::net::TcpListener;
 
@@ -32,7 +33,12 @@ fn main() {
 
                 match path {
                     "/" => {
-                        let response = "HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n";
+                        let status_line = "HTTP/1.1 200 OK\r\n";
+                        let contents = fs::read_to_string("index.html").unwrap();
+                        let length = contents.len();
+                        // let response = "HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n";
+                        let response =
+                            format!("{status_line}Content-Type: text/html\r\nContent-Length: {length}\r\n\r\n{contents}");
                         stream.write_all(response.as_bytes()).unwrap();
                     }
                     _ => {
