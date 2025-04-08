@@ -16,6 +16,7 @@ pub struct ThreadPool {
 }
 
 type Job = Box<dyn FnOnce() + Send + 'static>;
+
 impl ThreadPool {
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
@@ -102,8 +103,6 @@ fn main() {
         
         match stream {
             Ok(stream) => {
-                // println!("accepted new connection!");
-                // handle_connection(stream);
                 pool.execute(|| {
                     handle_connection(stream);
                 });
